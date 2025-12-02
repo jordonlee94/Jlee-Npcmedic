@@ -1,0 +1,430 @@
+
+/* theme.css - unified neon-green theme (cleaned and optimized) */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+:root{
+  --bg: rgba(12,14,18,0.95);
+  --panel: #151515;
+  --accent: #C5FF00; /* primary neon */
+  --accent-2: #92ae2b8f; /* secondary */
+  --muted: rgba(255,255,255,0.12);
+  --text: #e9e9e9;
+}
+
+/* Reset */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);font-family:"Open Sans",sans-serif;color:var(--text)}
+a{color:inherit;text-decoration:none}
+
+/* Centered modal container */
+.crafting-modal{
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(1100px,94vw);
+  background:transparent;
+  padding:1.5rem;
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+}
+
+/* Header */
+.crafting-header{
+  border:2px solid var(--accent);
+  padding:1rem 1.5rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.55));
+}
+.crafting-header h1{margin:0;font-family:"Quantico",sans-serif;color:var(--accent);font-size:2.4rem;letter-spacing:0.02em}
+.crafting-header .xp{color:var(--muted)}
+
+/* Content layout */
+.crafting-content{
+  display:flex;
+  gap:1.5rem;
+  align-items:flex-start;
+}
+
+/* Panels */
+.panel{
+  background:var(--panel);
+  border:1px solid rgba(255,255,255,0.04);
+  padding:1rem;
+  flex:1;
+  min-height:360px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6) inset;
+}
+.panel.left{max-width:45%}
+.panel.right{max-width:55%;display:flex;flex-direction:column;justify-content:space-between}
+
+/* Recipes list */
+.recipes{display:flex;flex-direction:column;gap:0.8rem}
+.recipe-item{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+  padding:0.85rem 1rem;
+  cursor:pointer;
+  transition:all .18s ease;
+  font-weight:600;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.recipe-item.selected{
+  background:linear-gradient(180deg, rgba(197,255,0,0.12), rgba(197,255,0,0.06));
+  box-shadow:0 6px 30px rgba(197,255,0,0.12), 0 0 18px rgba(197,255,0,0.08) inset;
+  color:var(--text);
+  border-color:var(--accent-2);
+}
+.recipe-item:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+
+/* Requirements list */
+.requirements-list{color:var(--muted);padding-left:1rem}
+.requirements-list li{margin:0.5rem 0;list-style:disc}
+
+/* Craft button area */
+.craft-area{display:flex;justify-content:flex-end;align-items:center;padding-top:1rem}
+.craft-btn{
+  background:var(--accent);
+  color:#000;
+  font-weight:900;
+  padding:0.6rem 1.6rem;
+  border:none;
+  font-size:1.6rem;
+  letter-spacing:0.02em;
+  cursor:pointer;
+  box-shadow:0 8px 30px rgba(197,255,0,0.18), 0 0 30px rgba(197,255,0,0.12) inset;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.craft-btn:hover{transform:translateY(-3px);box-shadow:0 16px 60px rgba(197,255,0,0.28)}
+
+/* XP Bar */
+.xp-container{display:flex;gap:1rem;align-items:center}
+.xp-bar{flex:1;height:14px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+.xp-fill{height:100%;width:50%;background:linear-gradient(90deg,#92ae2b,#C5FF00);transition:width .3s ease}
+
+/* Responsive */
+@media (max-width:900px){
+  .crafting-content{flex-direction:column}
+  .panel.left,.panel.right{max-width:100%}
+  .craft-header h1{font-size:1.6rem}
+}
+
+/* Buttons and generic elements */
+button, .btn { font-family:"Quantico",sans-serif; border-radius:6px; }
+button:focus{outline:none;box-shadow:0 0 0 3px rgba(197,255,0,0.08)}
+
+/* Utility */
+.small-muted{color:var(--muted);font-size:0.95rem}
+
+
+
+/* Buttons */
+.craft-btn {
+  background: var(--accent);
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(197,255,0,0.14);
+}
+.craft-btn:hover{ box-shadow: 0 16px 60px rgba(197,255,0,0.24); transform: translateY(-2px); }
+
+.craft-btn[disabled] { background:#444; cursor:not-allowed; opacity:0.6; }
+
+/* XP fill */
+.xpfill, #xp-fill {
+  height:100%;
+  width:0%;
+  background: linear-gradient(90deg,#92ae2b,#C5FF00);
+  transition: width .3s ease;
+}
+/* Close button */
+#close-button { background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,0.03); padding:6px 8px; border-radius:6px; cursor:pointer; }
+#close-button:hover { color: var(--accent); border-color: var(--accent-2); box-shadow: 0 6px 20px rgba(197,255,0,0.08); }
+
+/* Ensure any leftover blue is overridden */
+[class*="btn"], button { background: transparent !important; color: inherit !important; }
+.craft-btn { background: var(--accent) !important; color: #000 !important; }
+
+
+/* === appended theme overrides === */
+
+/* THEME OVERRIDES - neon green */
+:root{ --accent:#C5FF00; --accent-2:#92ae2b8f; --bg: rgba(12,14,18,0.95); --panel:#111; --muted: rgba(255,255,255,0.12); }
+body { background: var(--bg) !important; }
+#crafting-container { display: none !important; } /* hidden by default */
+#crafting-container.active { display: flex !important; } /* when JS shows, add active class if desired */
+
+.craft-btn { background: var(--accent) !important; color: #000 !important; font-weight:900; box-shadow: 0 8px 30px rgba(197,255,0,0.14) !important; }
+.craft-btn:hover { box-shadow: 0 16px 60px rgba(197,255,0,0.24) !important; transform: translateY(-2px); }
+
+#close-button { background: transparent !important; color: var(--muted) !important; border: 1px solid rgba(255,255,255,0.03) !important; }
+#close-button:hover { color: var(--accent) !important; border-color: var(--accent-2) !important; box-shadow: 0 6px 20px rgba(197,255,0,0.08) !important; }
+
+.xpfill, #xp-fill { background: linear-gradient(90deg,#92ae2b,#C5FF00) !important; height:100% !important; transition: width .3s ease !important; }
+
+/* Remove default blue backgrounds from any buttons */
+button, .btn, [class*="btn"] { background: transparent !important; color: inherit !important; }
+
+
+
+/* === PROJECT THEME OVERRIDES === */
+:root{
+  --bg: rgba(12,14,18,0.95);
+  --panel: #111;
+  --accent: #C5FF00;
+  --accent-2: #92ae2b8f;
+  --muted: rgba(255,255,255,0.18);
+  --text: #e9e9e9;
+}
+
+body { background: var(--bg) !important; }
+
+/* Ensure overlay is hidden until opened; when opened JS sets display:block */
+#crafting-container { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 9999; }
+
+/* Crafting UI shell */
+#crafting-ui {
+  background: transparent;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Header */
+#crafting-ui .header {
+  border: 2px solid var(--accent);
+  padding: 18px 24px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.55));
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom: 18px;
+}
+#crafting-ui .header h2 { margin:0; font-family: "Quantico", sans-serif; color: var(--accent); font-size: 44px; }
+#crafting-ui .header .xp { color: var(--muted); font-weight:600; }
+
+/* Content layout */
+#crafting-ui .content { display:flex; gap:28px; }
+
+/* Panels */
+#crafting-ui .panel { background: var(--panel); border:1px solid rgba(255,255,255,0.03); padding:18px; min-height:360px; box-sizing:border-box; }
+#crafting-ui .panel.left { width: 42%; }
+#crafting-ui .panel.right { width: 58%; display:flex; flex-direction:column; justify-content:space-between; }
+
+/* Recipes list */
+.recipe-item {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+  padding:14px 16px;
+  margin-bottom:12px;
+  cursor:pointer;
+  font-weight:600;
+  color:var(--muted);
+}
+.recipe-item.selected {
+  background: linear-gradient(180deg, rgba(197,255,0,0.12), rgba(197,255,0,0.06));
+  color: var(--text);
+  box-shadow: 0 6px 30px rgba(197,255,0,0.08);
+  border-color: var(--accent-2);
+}
+
+/* Requirements */
+.requirements-list { color: var(--muted); padding-left: 18px; }
+
+/* Craft button */
+.craft-area { display:flex; justify-content:flex-end; }
+.craft-btn {
+  background: var(--accent) !important;
+  color: #000 !important;
+  font-weight:900;
+  padding:8px 18px;
+  font-size:28px;
+  border:none;
+  cursor:pointer;
+  box-shadow: 0 8px 30px rgba(197,255,0,0.14);
+}
+.craft-btn:hover { box-shadow: 0 20px 60px rgba(197,255,0,0.22); transform: translateY(-2px); }
+
+/* XP bar */
+.xpbar { height:12px; background: rgba(255,255,255,0.04); border-radius:8px; overflow:hidden; margin-top:8px; width:260px; }
+.xpfill, #xp-fill { height:100%; background: linear-gradient(90deg,#92ae2b,#C5FF00); width:0%; transition: width .3s ease; }
+
+/* Remove fullscreen dim overlay if present */
+#crafting-overlay { display:none !important; }
+
+/* Responsive */
+@media (max-width:1000px){
+  #crafting-ui .content { flex-direction:column; }
+  #crafting-ui .panel.left, #crafting-ui .panel.right { width:100%; }
+}
+
+
+/* === Patch overrides === */
+
+/* Overlay behavior - hidden by default */
+#crafting-container, .inventory-container, #crafting-overlay {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* When active, a slight translucent background appears */
+#crafting-container.active, .inventory-container.active, #crafting-overlay.active {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35) !important;
+}
+
+/* Ensure the actual panel remains centered and visible */
+#crafting-ui { background: transparent !important; }
+#crafting-ui .panel { background: #111 !important; }
+
+
+/* === Cinematic Patch === */
+
+/* Cinematic overlay & panel animations */
+:root{ --accent: #C5FF00; --overlay-bg: rgba(0,0,0,0.35); --panel-bg: #111; }
+
+/* Ensure containers are hidden by default and transparent */
+#crafting-container, .inventory-container, #crafting-overlay {
+  display: none !important;
+  opacity: 0 !important;
+  background: transparent !important;
+  transition: opacity 0.5s ease, background 0.5s ease;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 9999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+}
+
+/* active state: show overlay behind the panel only */
+#crafting-container.active, .inventory-container.active, #crafting-overlay.active {
+  display: flex !important;
+  opacity: 1 !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+}
+
+/* create a behind-panel overlay element inside container (.panel-overlay) */
+#crafting-container .panel-overlay, .inventory-container .panel-overlay, #crafting-overlay .panel-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; left: 0;
+  background: var(--overlay-bg);
+  border-radius: 8px;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* when active, show the panel-overlay behind panel */
+#crafting-container.active .panel-overlay, .inventory-container.active .panel-overlay, #crafting-overlay.active .panel-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* panel wrapper should be above overlay */
+#crafting-container .crafting-panel, .inventory-container .crafting-panel, #crafting-overlay .crafting-panel {
+  position: relative;
+  z-index: 2;
+  transform: scale(1.05);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(.2,.8,.2,1), opacity 0.5s ease;
+  will-change: transform, opacity;
+  border-radius: 8px;
+}
+
+/* when active, animate panel to normal scale and full opacity */
+#crafting-container.active .crafting-panel, .inventory-container.active .crafting-panel, #crafting-overlay.active .crafting-panel {
+  transform: scale(1.0);
+  opacity: 1;
+}
+
+/* ensure inner panel styling */
+#crafting-ui, #crafting-ui .panel, .crafting-panel .panel { background: var(--panel-bg) !important; border-radius:8px; box-shadow: 0 6px 30px rgba(0,0,0,0.6); }
+
+/* Craft button glow */
+.craft-btn {
+  background: var(--accent) !important;
+  color: #000 !important;
+  box-shadow: 0 8px 30px rgba(197,255,0,0.14);
+  transition: box-shadow 0.25s ease, transform 0.12s ease;
+}
+.craft-btn:hover {
+  box-shadow: 0 20px 80px rgba(197,255,0,0.28), 0 0 40px rgba(197,255,0,0.12) inset;
+  transform: translateY(-2px);
+}
+
+/* Ensure xp fill uses accent */
+#xp-fill, .xpfill { background: linear-gradient(90deg,#92ae2b,#C5FF00) !important; }
+
+/* Hide any body-level overlays */
+body > .overlay, body > #overlay { display: none !important; }
+
+
+
+/* === Cinematic green fade overlay (0.4s) - injected === */
+/* Prevent grey overlay when UI closed */
+:root{ --cinematic-overlay: rgba(100,150,50,0.85); --cinematic-duration: 0.4s; }
+
+/* Hide overlay containers by default */
+#crafting-container, .inventory-container, #crafting-overlay, .overlay, .background {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity var(--cinematic-duration) ease, visibility var(--cinematic-duration) ease;
+  pointer-events: none !important;
+}
+
+/* Active state - reveal overlay */
+#crafting-container.active, .inventory-container.active, #crafting-overlay.active, .overlay.active, .background.active {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Behind-panel overlay element */
+#crafting-container .panel-overlay, .inventory-container .panel-overlay, #crafting-overlay .panel-overlay, .overlay .panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--cinematic-overlay) !important;
+  opacity: 0;
+  transition: opacity var(--cinematic-duration) ease;
+  border-radius: 8px;
+  z-index: 1;
+  pointer-events: none;
+}
+#crafting-container.active .panel-overlay, .inventory-container.active .panel-overlay, #crafting-overlay.active .panel-overlay, .overlay.active .panel-overlay {
+  opacity: 1;
+}
+
+/* Panel above overlay */
+#crafting-container .crafting-panel, .inventory-container .crafting-panel, #crafting-overlay .crafting-panel, .overlay .crafting-panel {
+  position: relative;
+  z-index: 2;
+  transform: scale(1.02);
+  opacity: 0;
+  transition: transform var(--cinematic-duration) cubic-bezier(.2,.8,.2,1), opacity var(--cinematic-duration) ease;
+}
+#crafting-container.active .crafting-panel, .inventory-container.active .crafting-panel, #crafting-overlay.active .crafting-panel, .overlay.active .crafting-panel {
+  transform: scale(1.0);
+  opacity: 1;
+}
+
+/* Safety overrides */
+body > .overlay, body > #overlay, body > .inventory-container { display: none !important; }

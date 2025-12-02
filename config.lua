@@ -32,7 +32,7 @@ Config.Prefix = "[AI Medic]"
 Config.Cooldown = 600
 Config.MedicCooldown = 600 -- seconds, default 10 minutes
 Config.Debug = false
-Config.MaxSimultaneousMedics = 3
+Config.MaxSimultaneousMedics = 7
 Config.BypassJobs = { "ambulance", "police" }
 
 -- Jobs exempt from billing (no charge when using NPC or ambulance)

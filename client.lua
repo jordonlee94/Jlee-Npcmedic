@@ -60,7 +60,8 @@ local function spawnAIMedic(coords)
             ClearPedTasks(medic)
             TaskGoToEntity(medic, player, -1, 1.0, 0.5, 1073741824, 0)
         end
-        Wait(150)
+        -- reduce polling frequency when approaching to save CPU
+        Wait(300)
     end
 
     if not DoesEntityExist(medic) then return end
@@ -70,7 +71,7 @@ local function spawnAIMedic(coords)
         local timeout = GetGameTimer() + 1000
         while not NetworkHasControlOfEntity(medic) and GetGameTimer() < timeout do
             NetworkRequestControlOfEntity(medic)
-            Wait(50)
+            Wait(100)
         end
         SetEntityCoords(medic, target.x, target.y, target.z, false, false, false, true)
     end
@@ -173,19 +174,21 @@ local function spawnAIAmbulance(coords)
     local stuckSince = nil
     while GetGameTimer() - startTime < (Config.AmbulanceOverallTimeout or 120) * 1000 do
         if not DoesEntityExist(vehicle) then break end
-        local dist = #(GetEntityCoords(vehicle) - GetEntityCoords(playerPed))
+        local vPos = GetEntityCoords(vehicle)
+        local pPos = GetEntityCoords(playerPed)
+        local dist = #(vPos - pPos)
         if dist <= (Config.PickupRadius or 15.0) then
             arrivedToPlayer = true
             break
         end
-        local curPos = GetEntityCoords(vehicle)
+        local curPos = vPos
         if #(curPos - lastPos) < 0.5 then
             if not stuckSince then stuckSince = GetGameTimer() end
         else
             stuckSince = nil
         end
         if stuckSince and (GetGameTimer() - stuckSince) > (Config.AmbulanceStuckTimeout or 120) * 1000 then
-            local t = GetEntityCoords(playerPed) + vector3(5.0, 0.0, 0.0)
+            local t = pPos + vector3(5.0, 0.0, 0.0)
             if NetworkRequestControlOfEntity(vehicle) then
                 SetEntityCoords(vehicle, t.x, t.y, t.z, false, false, false, true)
             else
@@ -194,7 +197,16 @@ local function spawnAIAmbulance(coords)
             stuckSince = nil
         end
         lastPos = curPos
-        Wait(500)
+        -- dynamic polling: check less frequently when far away
+        if dist > 80.0 then
+            Wait(2000)
+        elseif dist > 30.0 then
+            Wait(1000)
+        elseif dist > 10.0 then
+            Wait(500)
+        else
+            Wait(250)
+        end
     end
 
     if not arrivedToPlayer then
@@ -210,7 +222,7 @@ local function spawnAIAmbulance(coords)
         Wait(800) -- give vehicle time to come to rest before leaving
         TaskLeaveVehicle(driver, vehicle, 0)
         local leaveStart = GetGameTimer()
-        while IsPedInAnyVehicle(driver, false) and GetGameTimer() - leaveStart < 4000 do Wait(150) end
+        while IsPedInAnyVehicle(driver, false) and GetGameTimer() - leaveStart < 4000 do Wait(300) end
         if IsPedInAnyVehicle(driver, false) then
             TaskLeaveVehicle(driver, vehicle, 0)
             Wait(200)
@@ -222,7 +234,7 @@ local function spawnAIAmbulance(coords)
         Wait(300)
         ClearPedTasks(driver)
         TaskGoToEntity(driver, playerPed, -1, 1.0, 2.0, 1073741824.0, 0)
-        while #(GetEntityCoords(driver) - GetEntityCoords(playerPed)) > 2.5 do Wait(250) end
+        while #(GetEntityCoords(driver) - GetEntityCoords(playerPed)) > 2.5 do Wait(500) end
 
         RequestAnimDict('amb@medic@standing@kneel@base')
         while not HasAnimDictLoaded('amb@medic@standing@kneel@base') do Wait(10) end
@@ -232,7 +244,7 @@ local function spawnAIAmbulance(coords)
         TaskLeaveVehicle(driver, vehicle, 0)
         Wait(1000)
         TaskGoToEntity(driver, playerPed, -1, 1.0, 2.0, 1073741824.0, 0)
-        while #(GetEntityCoords(driver) - GetEntityCoords(playerPed)) > 1.8 do Wait(200) end
+        while #(GetEntityCoords(driver) - GetEntityCoords(playerPed)) > 1.8 do Wait(400) end
 
         RequestAnimDict('missfinale_c2mcs_1')
         while not HasAnimDictLoaded('missfinale_c2mcs_1') do Wait(10) end
@@ -245,7 +257,7 @@ local function spawnAIAmbulance(coords)
             local timeoutCtrl = GetGameTimer() + 2000
             while not NetworkHasControlOfEntity(playerPed) and GetGameTimer() < timeoutCtrl do
                 NetworkRequestControlOfEntity(playerPed)
-                Wait(50)
+                Wait(100)
             end
             DetachEntity(playerPed, true, true)
             ClearPedTasksImmediately(playerPed)
@@ -256,7 +268,7 @@ local function spawnAIAmbulance(coords)
                 local timeoutCtrlV = GetGameTimer() + 2000
                 while not NetworkHasControlOfEntity(vehicle) and GetGameTimer() < timeoutCtrlV do
                     NetworkRequestControlOfEntity(vehicle)
-                    Wait(50)
+                    Wait(100)
                 end
                 local preferredSeats = Config.SeatIndices or {2,3,1,0}
                 for _, seat in ipairs(preferredSeats) do
@@ -287,14 +299,14 @@ local function spawnAIAmbulance(coords)
                 break
             end
             if IsPedRagdoll(driver) then ClearPedTasks(driver) TaskGoToCoordAnyMeans(driver, dropoff2.x, dropoff2.y, dropoff2.z, 1.2, 0, 0, 786603, 0xbf800000) end
-            Wait(250)
+            Wait(500)
         end
 
         if isBeingCarried then
             local timeoutCtrl2 = GetGameTimer() + 2000
             while not NetworkHasControlOfEntity(playerPed) and GetGameTimer() < timeoutCtrl2 do
                 NetworkRequestControlOfEntity(playerPed)
-                Wait(50)
+                Wait(100)
             end
             DetachEntity(playerPed, true, true)
             SetPedCanRagdoll(playerPed, true)
@@ -307,7 +319,7 @@ local function spawnAIAmbulance(coords)
             local timeoutCtrl3 = GetGameTimer() + 1000
             while not NetworkHasControlOfEntity(playerPed) and GetGameTimer() < timeoutCtrl3 do
                 NetworkRequestControlOfEntity(playerPed)
-                Wait(50)
+                Wait(100)
             end
             SetEntityCoords(playerPed, dropoff2.x, dropoff2.y, dropoff2.z)
             QBCore.Functions.Notify('Medic carried you into the ward safely.', 'success')
